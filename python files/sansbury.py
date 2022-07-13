@@ -20,7 +20,6 @@ laser = Laser(path_to_bpe_codes, path_to_bpe_vocab, path_to_encoder)
 classifier=joblib.load('/Users/manirathinams/Documents/Python /woolsworth pdf/sansbury_nutri.sav')
 mlp_model=joblib.load('/Users/manirathinams/Documents/Python /woolsworth pdf/woolworths.sav')
 ________________________________________________________________
-
 def data_extraction_table(file_path, pgs):
     from pdf2docx import parse
     word_file='/Users/manirathinams/Documents/KT/sansbury_pdf/Input_files/JS.docx'
@@ -295,3 +294,5 @@ def final_extraction(file_path,pgs):
 file_path='/Users/manirathinams/Documents/KT/sansbury_pdf/Input_files/JS Cranberry Cosmopolitan 50cl - 5000000ML (Gabriel Boudier)_V1 (1).pdf'
 result=final_extraction(file_path, 3)
 result
+
+##this code is enhansed by manirathinam
