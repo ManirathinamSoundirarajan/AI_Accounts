@@ -9,7 +9,7 @@ import tabula
 import mammoth
 import pdfplumber
 import joblib
-________________________________________________________________
+
 # Laser Embedding
 from laserembeddings import Laser
 path_to_bpe_codes = r'/Users/manirathinams/opt/anaconda3/lib/python3.9/site-packages/laserembeddings/data/93langs.fcodes'
@@ -18,7 +18,6 @@ path_to_encoder = r'/Users/manirathinams/opt/anaconda3/lib/python3.9/site-packag
 laser = Laser(path_to_bpe_codes, path_to_bpe_vocab, path_to_encoder) 
 ## loading model from joblib file
 classifier=joblib.load('/Users/manirathinams/Documents/KT/pdf practise/Magnum.sav')
-________________________________________________________________
 
 ##Extracting each page tables using pdfplumber package
 def tables_extraction(pdf_path,p):
@@ -40,7 +39,7 @@ def tables_extraction(pdf_path,p):
             elif ind==0 and'Purpose' in val[0]:
                 dataframes.append(pd.DataFrame(tables[i]))
     return dataframes
-________________________________________________________________
+
 def key_values(dataframes):
     keys1=[]
     val=[]
@@ -68,7 +67,7 @@ def key_values(dataframes):
             key.append('UNMAPPED')
     
     return key, val
-________________________________________________________________
+
 def content_classification_slicing(pdf_path, p):
     global a, b
     a=0 
@@ -92,7 +91,7 @@ def content_classification_slicing(pdf_path, p):
 
     text=temp[a:b]
     return text
-________________________________________________________________
+
 def Content_classification(text):
     ky=[]
     vl=[]
@@ -114,7 +113,7 @@ def Content_classification(text):
     key1=[ky[k] for k in range(len(ky)) if ky[k]!='UNMAPPED']
     val1=[vl[k] for k in range(len(ky)) if ky[k]!='UNMAPPED']
     return key1, val1
-________________________________________________________________
+
 def magnum_main(pdf_path, p):
     dataframes=tables_extraction(pdf_path, p)
     key,val=key_values(dataframes)
@@ -130,7 +129,6 @@ def magnum_main(pdf_path, p):
     
     output={str(p):general}
     return output
-________________________________________________________________
 
 def Nutrition_slicing(Nutri_file,pgs):
     #pgs=0
@@ -165,7 +163,7 @@ def Nutrition_slicing(Nutri_file,pgs):
     nutr1=data.iloc[hd1+1:ft1,:j]
     nutr_hd=nutr1.dropna(how='all',axis=1)
     return nutr, nutr_hd
-________________________________________________________________
+
 ## writing a function to print nutrional information in specific format
 def nutr_format(nutr):
     value=[]
@@ -188,7 +186,7 @@ def nutr_format(nutr):
 
     final={h:v for h,v in (zip(head, value))}
     return final
-________________________________________________________________
+
 ##Extract a elements which contains colon seperately, then split the string into two parts using delimiter ':'
 ##example ['Tamaño de la porción: 48,7 g'] to ['Tamaño de la porción', '48,7 g'] 
 def net_content(nutr_hd):    
@@ -231,7 +229,7 @@ def net_content(nutr_hd):
     value=val+val1
     nut1={h:v for h,v in zip(hd,value)}
     return nut1
-________________________________________________________________
+
 def Nutrition_main(Nutri_file,pgs):
     nutr, nutr_hd=Nutrition_slicing(Nutri_file,pgs)
     Netcontant=net_content(nutr_hd)
@@ -242,7 +240,7 @@ def Nutrition_main(Nutri_file,pgs):
         Nutr_out={}
         
     return Nutr_out
-________________________________________________________________
+
 def final_extraction(pdf_path, Nutri_file, pgs):
     try:
         out1=magnum_main(pdf_path, pgs)
@@ -252,7 +250,7 @@ def final_extraction(pdf_path, Nutri_file, pgs):
         final=Nutrition_main(Nutri_file, pgs)
         
     return final
-________________________________________________________________
+
 output={}
 pdf=pdfplumber.open(pdf_path)
 for i in range(len(pdf.pages)):

@@ -10,7 +10,8 @@ import mammoth
 import pdfplumber
 import joblib
 from bs4 import BeautifulSoup
-________________________________________________________________
+
+# Laser Embedding
 from laserembeddings import Laser
 path_to_bpe_codes = r'/Users/manirathinams/opt/anaconda3/lib/python3.9/site-packages/laserembeddings/data/93langs.fcodes'
 path_to_bpe_vocab = r'/Users/manirathinams/opt/anaconda3/lib/python3.9/site-packages/laserembeddings/data/93langs.fvocab'
@@ -19,7 +20,7 @@ laser = Laser(path_to_bpe_codes, path_to_bpe_vocab, path_to_encoder)
 
 classifier=joblib.load('/Users/manirathinams/Documents/Python /woolsworth pdf/sansbury_nutri.sav')
 mlp_model=joblib.load('/Users/manirathinams/Documents/Python /woolsworth pdf/woolworths.sav')
-________________________________________________________________
+
 def data_extraction_table(file_path, pgs):
     from pdf2docx import parse
     word_file='/Users/manirathinams/Documents/KT/sansbury_pdf/Input_files/JS.docx'
@@ -57,7 +58,6 @@ def data_extraction_table(file_path, pgs):
 def remove_empty_str_list(lists):
     temp=[s for s in lists if s]
     return temp
-________________________________________________________________
 
 def general_dict_content(single_line_list,col_row_span,pgs):
     general_dict={}
@@ -134,7 +134,7 @@ def general_dict_content(single_line_list,col_row_span,pgs):
         general_dict.setdefault(keys[i],[]).append(val[i])
     #output={str(pgs):general_dict}    
     return general_dict
-________________________________________________________________
+
 
 def bop_nutrition_extraction(file_path,pgs):
 #Extracting the BackofPack Nutrition table from multiple tables in a page using Camelot
@@ -151,7 +151,7 @@ def bop_nutrition_extraction(file_path,pgs):
     dataframes=tables[bop].df
     dfs=dataframes.iloc[bop_hd:,:]
     return dfs
-________________________________________________________________
+
 
 def fop_nutrition_extraction(file_path,pgs):
 #Extracting the FrontofPack Nutrition table from multiple tables in a page using Camelot
@@ -172,7 +172,6 @@ def fop_nutrition_extraction(file_path,pgs):
     df=pd.DataFrame(dataframes.iloc[fop_hd:fop_ft,:])
     dfs=df.T
     return dfs
-________________________________________________________________
 
 def nutrition_classification(dfs):
     match_text=['energy','fat','saturates','monounsaturates','polyunsaturates','carbohydrate','sugars','starch','fibre','protein','salt']
@@ -210,7 +209,6 @@ def nutrition_classification(dfs):
     for k in range(len(key)):
         nutr.setdefault(key[k],[]).extend(val[k])   
     return nutr
-________________________________________________________________
 
 def nutrition_serve_header(file_path, pgs):
 #Identify and append the index of both FrontofPack, BackofPack tables into list using camelot from multiple tables in a page 
@@ -258,7 +256,6 @@ def nutrition_serve_header(file_path, pgs):
         return serv_nutr
     else:
         return {}
-________________________________________________________________
 
 def general_main(file_path, pgs):
 #writing a function for general information part    
@@ -270,7 +267,7 @@ def general_main(file_path, pgs):
         return sansbury_final
     else:
         return general
-________________________________________________________________
+
 def nutrition_main(file_path, pgs):
 #writing a function for nutritional information part    
     fop_dfs=fop_nutrition_extraction(file_path, pgs)
@@ -283,8 +280,8 @@ def nutrition_main(file_path, pgs):
     else:
         fnl={}             
     return fnl
-________________________________________________________________
-def final_extraction(file_path,pgs):
+
+def sansbury_main(file_path,pgs):
     out1=general_main(file_path, pgs)
     out2=nutrition_main(file_path, pgs)
     output={**out1,**out2}
